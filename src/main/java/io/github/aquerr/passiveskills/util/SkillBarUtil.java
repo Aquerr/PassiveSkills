@@ -15,10 +15,10 @@ public class SkillBarUtil
 {
 	private static final Map<UUID, ServerBossBar> playersSkillBars = new HashMap<>();
 
-	public static ServerBossBar getSkillBar(final Player player, final Text name, final int exp)
+	public static ServerBossBar getSkillBar(final Player player, final Text name, final float percentage)
 	{
 		if(playersSkillBars.containsKey(player.getUniqueId()))
-			return playersSkillBars.get(player.getUniqueId()).setPercent((float) exp / 100);
+			return playersSkillBars.get(player.getUniqueId()).setPercent(percentage);
 
 
 		ServerBossBar bossBar = ServerBossBar.builder()
@@ -28,7 +28,7 @@ public class SkillBarUtil
 				.createFog(false)
 				.darkenSky(false)
 				.visible(true)
-				.percent((float) exp / 100)
+				.percent(percentage)
 				.build();
 
 		playersSkillBars.put(player.getUniqueId(), bossBar);

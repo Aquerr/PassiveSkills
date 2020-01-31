@@ -2,6 +2,7 @@ package io.github.aquerr.passiveskills.data;
 
 import com.google.common.reflect.TypeToken;
 import io.github.aquerr.passiveskills.PassiveSkillsPlugin;
+import io.github.aquerr.passiveskills.entities.MiningSkill;
 import io.github.aquerr.passiveskills.entities.Skill;
 import io.github.aquerr.passiveskills.entities.SkillType;
 import org.spongepowered.api.data.*;
@@ -29,36 +30,39 @@ public class SkillTranslator implements DataTranslator<Skill>
 			}
 		});
 
-		if(!view.contains(Skill.NAME_QUERY, Skill.TYPE_QUERY, Skill.LEVEL_QUERY, Skill.EXPERIENCE_QUERY))
+		if(!view.contains(SkillQueries.NAME_QUERY, SkillQueries.TYPE_QUERY, SkillQueries.LEVEL_QUERY, SkillQueries.EXPERIENCE_QUERY))
 			throw new InvalidDataException("Incomplete data");
 
-		final String name = view.getString(Skill.NAME_QUERY).get();
-		final SkillType skillType = SkillType.valueOf(view.getString(Skill.TYPE_QUERY).get());
-		final int level = view.getInt(Skill.LEVEL_QUERY).get();
-		final int experience = view.getInt(Skill.EXPERIENCE_QUERY).get();
-		return new Skill(name, skillType, level, experience);
+		final String name = view.getString(SkillQueries.NAME_QUERY).get();
+		final SkillType skillType = SkillType.valueOf(view.getString(SkillQueries.TYPE_QUERY).get());
+		final int level = view.getInt(SkillQueries.LEVEL_QUERY).get();
+		final int experience = view.getInt(SkillQueries.EXPERIENCE_QUERY).get();
+		if (skillType == SkillType.MINING)
+			return new MiningSkill(level, experience);
+		else
+			return new Skill(name, SkillType.MINING, level, experience);
 	}
 
 	@Override
 	public DataContainer translate(Skill obj) throws InvalidDataException
 	{
 		return new MemoryDataContainer()
-				.set(Skill.NAME_QUERY, obj.getName())
-				.set(Skill.LEVEL_QUERY, obj.getLevel())
-				.set(Skill.EXPERIENCE_QUERY, obj.getExperience())
-				.set(Skill.TYPE_QUERY, obj.getSkillType().getName())
+				.set(SkillQueries.NAME_QUERY, obj.getName())
+				.set(SkillQueries.LEVEL_QUERY, obj.getLevel())
+				.set(SkillQueries.EXPERIENCE_QUERY, obj.getExperience())
+				.set(SkillQueries.TYPE_QUERY, obj.getType().getName())
 				.set(Queries.CONTENT_VERSION, SkillBuilder.CONTENT_VERSION);
 	}
 
 	@Override
 	public String getId()
 	{
-		return null;
+		return "passiveskills:skill_translator";
 	}
 
 	@Override
 	public String getName()
 	{
-		return null;
+		return "Skill Translator";
 	}
 }

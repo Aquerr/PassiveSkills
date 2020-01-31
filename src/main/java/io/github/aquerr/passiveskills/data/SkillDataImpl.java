@@ -1,6 +1,7 @@
 package io.github.aquerr.passiveskills.data;
 
 import io.github.aquerr.passiveskills.PassiveSkillsPlugin;
+import io.github.aquerr.passiveskills.entities.MiningSkill;
 import io.github.aquerr.passiveskills.entities.Skill;
 import io.github.aquerr.passiveskills.entities.SkillType;
 import org.spongepowered.api.Sponge;
@@ -19,20 +20,24 @@ public class SkillDataImpl extends AbstractData<SkillData, ImmutableSkillData> i
 
 	public SkillDataImpl()
 	{
-		this(null);
+		this(new MiningSkill());
 	}
 
 	public SkillDataImpl(final Skill skill)
 	{
 		this.skill = skill;
-
 		this.registerGettersAndSetters();
 	}
 
 	@Override
 	public Value<Skill> skill()
 	{
-		return Sponge.getRegistry().getValueFactory().createValue(PassiveSkillsPlugin.MINING_SKILL, this.skill, new Skill("Mining", SkillType.MINING));
+		if (this.skill.getType() == SkillType.MINING)
+			return Sponge.getRegistry().getValueFactory().createValue(PassiveSkillsPlugin.MINING_SKILL, this.skill, new MiningSkill());
+		else
+		{
+			return Sponge.getRegistry().getValueFactory().createValue(PassiveSkillsPlugin.MINING_SKILL, this.skill, new Skill("Mining", SkillType.MINING, 0, 0));
+		}
 	}
 
 	@Override
@@ -56,10 +61,10 @@ public class SkillDataImpl extends AbstractData<SkillData, ImmutableSkillData> i
 	@Override
 	public Optional<SkillData> from(DataContainer container)
 	{
-		if(!container.contains(PassiveSkillsPlugin.MINING_SKILL))
+		if(!container.contains(PassiveSkillsPlugin.MINING_SKILL) && !container.contains(PassiveSkillsPlugin.FIGHTING_SKILL))
 			return Optional.empty();
 
-		this.skill = container.getSerializable(PassiveSkillsPlugin.MINING_SKILL.getQuery(), Skill.class).get();
+		this.skill = container.getSerializable(PassiveSkillsPlugin.MINING_SKILL.getQuery(), Skill.class).orElse(container.getSerializable(PassiveSkillsPlugin.FIGHTING_SKILL.getQuery(), Skill.class).get());
 		return Optional.of(this);
 	}
 
@@ -97,7 +102,10 @@ public class SkillDataImpl extends AbstractData<SkillData, ImmutableSkillData> i
 		DataContainer container = super.toContainer();
 		if(this.skill != null)
 		{
-			container.set(PassiveSkillsPlugin.MINING_SKILL, this.skill);
+			if (this.skill.getType() == SkillType.MINING)
+				container.set(PassiveSkillsPlugin.MINING_SKILL, this.skill);
+			else if (this.skill.getType() == SkillType.FIGHTING)
+				container.set(PassiveSkillsPlugin.FIGHTING_SKILL, this.skill);
 		}
 		return container;
 	}

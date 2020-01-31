@@ -1,6 +1,7 @@
 package io.github.aquerr.passiveskills.entities;
 
 import io.github.aquerr.passiveskills.data.SkillBuilder;
+import io.github.aquerr.passiveskills.data.SkillQueries;
 import org.spongepowered.api.data.DataContainer;
 import org.spongepowered.api.data.DataQuery;
 import org.spongepowered.api.data.DataSerializable;
@@ -8,32 +9,27 @@ import org.spongepowered.api.data.Queries;
 
 public class Skill implements DataSerializable
 {
-	public static final DataQuery LEVEL_QUERY = DataQuery.of("Level");
-	public static final DataQuery EXPERIENCE_QUERY = DataQuery.of("Experience");
-	public static final DataQuery NAME_QUERY = DataQuery.of("Name");
-	public static final DataQuery TYPE_QUERY = DataQuery.of("Type");
-
-	private final String name;
-	private final SkillType skillType;
+	private String name;
 	private int level;
 	private int requiredToNextLevel;
 	private int experience;
+	private SkillType skillType;
 
-	public Skill(final String name, final SkillType skillType)
+	public Skill(final String name)
 	{
-		this(name, skillType, 0, 0);
+		this(name, SkillType.MINING, 0, 0);
 	}
 
-	public Skill(final String name, final SkillType skillType, final int level, final int experience)
+	public Skill(final String name, SkillType skillType, final int level, final int experience)
 	{
 		this.name = name;
-		this.skillType = skillType;
 		this.level = level;
 		this.experience = experience;
+		this.skillType = skillType;
 		calculateRequiredExpToNextLevel();
 	}
 
-	public SkillType getSkillType()
+	public SkillType getType()
 	{
 		return this.skillType;
 	}
@@ -51,6 +47,11 @@ public class Skill implements DataSerializable
 	public int getLevel()
 	{
 		return this.level;
+	}
+
+	public float getLevelPercentage()
+	{
+		return (float) this.experience / this.requiredToNextLevel;
 	}
 
 	public void addExperience(int experience)
@@ -94,10 +95,9 @@ public class Skill implements DataSerializable
 	public DataContainer toContainer()
 	{
 		return DataContainer.createNew()
-				.set(NAME_QUERY, this.name)
-				.set(LEVEL_QUERY, this.level)
-				.set(EXPERIENCE_QUERY, this.experience)
-				.set(TYPE_QUERY, this.skillType)
+				.set(SkillQueries.NAME_QUERY, this.name)
+				.set(SkillQueries.LEVEL_QUERY, this.level)
+				.set(SkillQueries.EXPERIENCE_QUERY, this.experience)
 				.set(Queries.CONTENT_VERSION, SkillBuilder.CONTENT_VERSION);
 	}
 }

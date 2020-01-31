@@ -3,6 +3,7 @@ package io.github.aquerr.passiveskills;
 import com.google.common.reflect.TypeToken;
 import com.google.inject.Inject;
 import io.github.aquerr.passiveskills.data.*;
+import io.github.aquerr.passiveskills.entities.MiningSkill;
 import io.github.aquerr.passiveskills.entities.Skill;
 import io.github.aquerr.passiveskills.listeners.BlockBreakListener;
 import org.spongepowered.api.Sponge;
@@ -101,6 +102,13 @@ public class PassiveSkillsPlugin
 				.id("mining_skill")
 				.name("Mining Skill")
 				.query(DataQuery.of("MiningSkill"))
+				.build();
+
+		FIGHTING_SKILL = Key.builder()
+				.type(new TypeToken<Value<Skill>>(){})
+				.id("fighting_skill")
+				.name("Fighting Skill")
+				.query(DataQuery.of("FightingSkill"))
 				.build();
 
 		//Register other keys here...

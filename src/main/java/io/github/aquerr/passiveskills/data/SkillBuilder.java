@@ -1,5 +1,6 @@
 package io.github.aquerr.passiveskills.data;
 
+import io.github.aquerr.passiveskills.entities.MiningSkill;
 import io.github.aquerr.passiveskills.entities.Skill;
 import io.github.aquerr.passiveskills.entities.SkillType;
 import org.spongepowered.api.data.DataView;
@@ -20,14 +21,18 @@ public class SkillBuilder extends AbstractDataBuilder<Skill>
 	@Override
 	protected Optional<Skill> buildContent(final DataView container) throws InvalidDataException
 	{
-		if(!container.contains(Skill.NAME_QUERY, Skill.TYPE_QUERY, Skill.LEVEL_QUERY, Skill.EXPERIENCE_QUERY))
+		if(!container.contains(SkillQueries.NAME_QUERY, SkillQueries.TYPE_QUERY, SkillQueries.LEVEL_QUERY, SkillQueries.EXPERIENCE_QUERY))
 			return Optional.empty();
 
-		final String name = container.getString(Skill.NAME_QUERY).get();
-		final int level = container.getInt(Skill.LEVEL_QUERY).get();
-		final int experience = container.getInt(Skill.EXPERIENCE_QUERY).get();
-		final SkillType type = SkillType.valueOf(container.getString(Skill.TYPE_QUERY).get());
+		final String name = container.getString(SkillQueries.NAME_QUERY).get();
+		final int level = container.getInt(SkillQueries.LEVEL_QUERY).get();
+		final int experience = container.getInt(SkillQueries.EXPERIENCE_QUERY).get();
+		final SkillType skillType = SkillType.valueOf(container.getString(SkillQueries.TYPE_QUERY).get());
 
-		return Optional.of(new Skill(name, type, level, experience));
+		if (skillType == SkillType.MINING)
+			return Optional.of(new MiningSkill(level, experience));
+//		else if (skillType == SkillType.FIGHTING)
+//			return Optional.of(new FightingSkill(level, experience));
+		return Optional.of(new Skill(name, SkillType.MINING, level, experience));
 	}
 }
