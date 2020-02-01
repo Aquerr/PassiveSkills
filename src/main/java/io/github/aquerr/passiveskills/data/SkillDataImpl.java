@@ -43,11 +43,18 @@ public class SkillDataImpl extends AbstractData<SkillData, ImmutableSkillData> i
 	@Override
 	protected void registerGettersAndSetters()
 	{
-		registerKeyValue(PassiveSkillsPlugin.MINING_SKILL, this::skill);
-
-		registerFieldGetter(PassiveSkillsPlugin.MINING_SKILL, this::getSkill);
-
-		registerFieldSetter(PassiveSkillsPlugin.MINING_SKILL, this::setSkill);
+		if (this.skill.getType() == SkillType.MINING)
+		{
+			registerKeyValue(PassiveSkillsPlugin.MINING_SKILL, this::skill);
+			registerFieldSetter(PassiveSkillsPlugin.MINING_SKILL, this::setSkill);
+			registerFieldGetter(PassiveSkillsPlugin.MINING_SKILL, this::getSkill);
+		}
+		else if (this.skill.getType() == SkillType.FIGHTING)
+		{
+			registerKeyValue(PassiveSkillsPlugin.FIGHTING_SKILL, this::skill);
+			registerFieldSetter(PassiveSkillsPlugin.FIGHTING_SKILL, this::setSkill);
+			registerFieldGetter(PassiveSkillsPlugin.FIGHTING_SKILL, this::getSkill);
+		}
 	}
 
 	@Override

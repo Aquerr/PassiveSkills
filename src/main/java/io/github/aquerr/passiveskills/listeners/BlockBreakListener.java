@@ -101,7 +101,7 @@ public class BlockBreakListener
 
 	}
 
-	@Listener(order = Order.LAST, beforeModifications = true)
+	@Listener(beforeModifications = true)
 	public void onBlockDrop(final SpawnEntityEvent event)
 	{
 		final List<Entity> entities = new ArrayList<>(event.getEntities());
@@ -127,9 +127,8 @@ public class BlockBreakListener
 
 		final MiningSkill skill = (MiningSkill) optionalSkill.get();
 		final int extraDropCount = skill.getExtraDropCount();
-		for (int i = 0; i < entities.size(); i++)
+		for (final Entity entity : entities)
 		{
-			final Entity entity = entities.get(i);
 			final Optional<ItemStackSnapshot> entityItemStackSnapshot = entity.get(Keys.REPRESENTED_ITEM);
 			if (!entityItemStackSnapshot.isPresent())
 				continue;

@@ -1,6 +1,7 @@
 package io.github.aquerr.passiveskills.data;
 
 import io.github.aquerr.passiveskills.PassiveSkillsPlugin;
+import io.github.aquerr.passiveskills.entities.FightingSkill;
 import io.github.aquerr.passiveskills.entities.MiningSkill;
 import io.github.aquerr.passiveskills.entities.Skill;
 import org.spongepowered.api.data.DataHolder;
@@ -42,7 +43,7 @@ public class SkillDataBuilder extends AbstractDataBuilder<SkillData> implements 
 			skillData.set(PassiveSkillsPlugin.MINING_SKILL, skill);
 		});
 
-		container.getSerializable(PassiveSkillsPlugin.FIGHTING_SKILL.getQuery(), Skill.class).ifPresent(skill ->
+		container.getSerializable(PassiveSkillsPlugin.FIGHTING_SKILL.getQuery(), FightingSkill.class).ifPresent(skill ->
 		{
 			skillData.set(PassiveSkillsPlugin.FIGHTING_SKILL, skill);
 		});

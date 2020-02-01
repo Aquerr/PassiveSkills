@@ -1,5 +1,6 @@
 package io.github.aquerr.passiveskills.data;
 
+import io.github.aquerr.passiveskills.entities.FightingSkill;
 import io.github.aquerr.passiveskills.entities.MiningSkill;
 import io.github.aquerr.passiveskills.entities.Skill;
 import io.github.aquerr.passiveskills.entities.SkillType;
@@ -31,8 +32,8 @@ public class SkillBuilder extends AbstractDataBuilder<Skill>
 
 		if (skillType == SkillType.MINING)
 			return Optional.of(new MiningSkill(level, experience));
-//		else if (skillType == SkillType.FIGHTING)
-//			return Optional.of(new FightingSkill(level, experience));
+		else if (skillType == SkillType.FIGHTING)
+			return Optional.of(new FightingSkill(level, experience));
 		return Optional.of(new Skill(name, SkillType.MINING, level, experience));
 	}
 }

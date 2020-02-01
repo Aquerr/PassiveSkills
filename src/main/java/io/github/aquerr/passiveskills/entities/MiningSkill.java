@@ -1,10 +1,7 @@
 package io.github.aquerr.passiveskills.entities;
 
-import java.util.Random;
-
 public class MiningSkill extends Skill
 {
-    private static final Random random = new Random();
     private static final String NAME = "Mining";
 
     public MiningSkill()
@@ -50,7 +47,7 @@ public class MiningSkill extends Skill
         int extraBlocksCount = 0;
         for (int i = 0; i < wishedCount; i++)
         {
-            double randomNumber = random.nextDouble();
+            double randomNumber = Skill.RANDOM.nextDouble();
             if (randomNumber <= extraDropChance)
             {
                 extraBlocksCount++;

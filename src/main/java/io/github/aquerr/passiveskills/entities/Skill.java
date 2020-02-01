@@ -7,8 +7,12 @@ import org.spongepowered.api.data.DataQuery;
 import org.spongepowered.api.data.DataSerializable;
 import org.spongepowered.api.data.Queries;
 
+import java.util.Random;
+
 public class Skill implements DataSerializable
 {
+	public static final Random RANDOM = new Random();
+
 	private String name;
 	private int level;
 	private int requiredToNextLevel;

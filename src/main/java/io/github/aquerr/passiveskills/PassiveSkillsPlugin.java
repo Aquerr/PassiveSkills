@@ -5,6 +5,7 @@ import com.google.inject.Inject;
 import io.github.aquerr.passiveskills.data.*;
 import io.github.aquerr.passiveskills.entities.MiningSkill;
 import io.github.aquerr.passiveskills.entities.Skill;
+import io.github.aquerr.passiveskills.listeners.AttackEntityListener;
 import io.github.aquerr.passiveskills.listeners.BlockBreakListener;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.command.CommandManager;
@@ -122,6 +123,7 @@ public class PassiveSkillsPlugin
 	private void registerListeners()
 	{
 		this.eventManager.registerListeners(this, new BlockBreakListener());
+		this.eventManager.registerListeners(this, new AttackEntityListener());
 		//Register Commands here...
 	}
 }

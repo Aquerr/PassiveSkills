@@ -2,6 +2,7 @@ package io.github.aquerr.passiveskills.data;
 
 import com.google.common.reflect.TypeToken;
 import io.github.aquerr.passiveskills.PassiveSkillsPlugin;
+import io.github.aquerr.passiveskills.entities.FightingSkill;
 import io.github.aquerr.passiveskills.entities.MiningSkill;
 import io.github.aquerr.passiveskills.entities.Skill;
 import io.github.aquerr.passiveskills.entities.SkillType;
@@ -39,8 +40,9 @@ public class SkillTranslator implements DataTranslator<Skill>
 		final int experience = view.getInt(SkillQueries.EXPERIENCE_QUERY).get();
 		if (skillType == SkillType.MINING)
 			return new MiningSkill(level, experience);
-		else
-			return new Skill(name, SkillType.MINING, level, experience);
+		else if (skillType == SkillType.FIGHTING)
+			return new FightingSkill(level, experience);
+		return new Skill(name, SkillType.MINING, level, experience);
 	}
 
 	@Override
