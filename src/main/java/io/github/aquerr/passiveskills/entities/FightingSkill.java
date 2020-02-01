@@ -14,7 +14,7 @@ public class FightingSkill extends Skill
 
     public float getExtraDamageChance()
     {
-        return (float) getLevel() / 100;
+        return (float) getLevel() / 25;
     }
 
     public float getExtraDamage()
