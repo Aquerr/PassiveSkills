@@ -4,7 +4,7 @@ public class FightingSkill extends Skill
 {
     public FightingSkill()
     {
-        super("Fighting", SkillType.FIGHTING, 0, 0);
+        super("Fighting Skill", SkillType.FIGHTING, 0, 0);
     }
 
     public FightingSkill(int level, int experience)
@@ -23,7 +23,7 @@ public class FightingSkill extends Skill
         float extraDamage = 0.0f;
 
         boolean shouldDealExtraDamage = false;
-        double randomNumber = Skill.RANDOM.nextDouble();
+        float randomNumber = Skill.RANDOM.nextFloat();
         if (randomNumber <= getExtraDamageChance())
         {
             shouldDealExtraDamage = true;

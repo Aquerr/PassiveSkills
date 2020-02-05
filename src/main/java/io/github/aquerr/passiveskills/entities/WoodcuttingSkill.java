@@ -1,15 +1,10 @@
 package io.github.aquerr.passiveskills.entities;
 
-public class MiningSkill extends Skill
+public class WoodcuttingSkill extends Skill
 {
-    public MiningSkill()
+    public WoodcuttingSkill()
     {
-        super("Mining Skill", SkillType.MINING, 0, 0);
-    }
-
-    public MiningSkill(final int level, final int experience)
-    {
-        super("Mining Skill", SkillType.MINING, level, experience);
+        super("Woodcutting Skill", SkillType.WOODCUTTING, 0, 0);
     }
 
     public double getExtraDropChance()

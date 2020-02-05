@@ -25,7 +25,6 @@ public class SkillBuilder extends AbstractDataBuilder<Skill>
 		if(!container.contains(SkillQueries.NAME_QUERY, SkillQueries.TYPE_QUERY, SkillQueries.LEVEL_QUERY, SkillQueries.EXPERIENCE_QUERY))
 			return Optional.empty();
 
-		final String name = container.getString(SkillQueries.NAME_QUERY).get();
 		final int level = container.getInt(SkillQueries.LEVEL_QUERY).get();
 		final int experience = container.getInt(SkillQueries.EXPERIENCE_QUERY).get();
 		final SkillType skillType = SkillType.valueOf(container.getString(SkillQueries.TYPE_QUERY).get());
@@ -34,6 +33,6 @@ public class SkillBuilder extends AbstractDataBuilder<Skill>
 			return Optional.of(new MiningSkill(level, experience));
 		else if (skillType == SkillType.FIGHTING)
 			return Optional.of(new FightingSkill(level, experience));
-		return Optional.of(new Skill(name, SkillType.MINING, level, experience));
+		return Optional.empty();
 	}
 }

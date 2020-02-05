@@ -38,14 +38,9 @@ public class SkillDataBuilder extends AbstractDataBuilder<SkillData> implements 
 	{
 		SkillData skillData = new SkillDataImpl();
 
-		container.getSerializable(PassiveSkillsPlugin.MINING_SKILL.getQuery(), MiningSkill.class).ifPresent(skill ->
+		container.getSerializableList(PassiveSkillsPlugin.SKILLS.getQuery(), Skill.class).ifPresent(skill ->
 		{
-			skillData.set(PassiveSkillsPlugin.MINING_SKILL, skill);
-		});
-
-		container.getSerializable(PassiveSkillsPlugin.FIGHTING_SKILL.getQuery(), FightingSkill.class).ifPresent(skill ->
-		{
-			skillData.set(PassiveSkillsPlugin.FIGHTING_SKILL, skill);
+			skillData.set(PassiveSkillsPlugin.SKILLS, skill);
 		});
 
 		return Optional.of(skillData);

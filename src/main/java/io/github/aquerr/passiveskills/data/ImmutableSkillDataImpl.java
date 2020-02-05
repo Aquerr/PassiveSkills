@@ -5,45 +5,49 @@ import io.github.aquerr.passiveskills.entities.Skill;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.data.DataContainer;
 import org.spongepowered.api.data.manipulator.immutable.common.AbstractImmutableData;
+import org.spongepowered.api.data.value.immutable.ImmutableListValue;
 import org.spongepowered.api.data.value.immutable.ImmutableValue;
+
+import java.util.List;
 
 public class ImmutableSkillDataImpl extends AbstractImmutableData<ImmutableSkillData, SkillData> implements ImmutableSkillData
 {
-	private final Skill skill;
+	private final List<Skill> skills;
+//	private final Skill skill;
 
-	private final ImmutableValue<Skill> skillValue;
+	private final ImmutableListValue<Skill> skillsValue;
 
 	public ImmutableSkillDataImpl()
 	{
 		this(null);
 	}
 
-	public ImmutableSkillDataImpl(final Skill skill)
+	public ImmutableSkillDataImpl(final List<Skill> skills)
 	{
-		this.skill = skill;
+		this.skills = skills;
 
-		this.skillValue = Sponge.getRegistry().getValueFactory().createValue(PassiveSkillsPlugin.MINING_SKILL, skill).asImmutable();
+		this.skillsValue = Sponge.getRegistry().getValueFactory().createListValue(PassiveSkillsPlugin.SKILLS, skills).asImmutable();
 
 		this.registerGetters();
 	}
 
 	@Override
-	public ImmutableValue<Skill> skill()
+	public ImmutableListValue<Skill> skills()
 	{
-		return this.skillValue;
+		return this.skillsValue;
 	}
 
 	@Override
 	protected void registerGetters()
 	{
-		registerKeyValue(PassiveSkillsPlugin.MINING_SKILL, this::skill);
-		registerFieldGetter(PassiveSkillsPlugin.MINING_SKILL, this::getSkill);
+		registerKeyValue(PassiveSkillsPlugin.SKILLS, this::skills);
+		registerFieldGetter(PassiveSkillsPlugin.SKILLS, this::getSkills);
 	}
 
 	@Override
 	public SkillData asMutable()
 	{
-		return new SkillDataImpl(this.skill);
+		return new SkillDataImpl(this.skills);
 	}
 
 	@Override
@@ -52,18 +56,18 @@ public class ImmutableSkillDataImpl extends AbstractImmutableData<ImmutableSkill
 		return SkillDataBuilder.CONTENT_VERSION;
 	}
 
-	private Skill getSkill()
+	private List<Skill> getSkills()
 	{
-		return this.skill;
+		return this.skills;
 	}
 
 	@Override
 	public DataContainer toContainer()
 	{
 		final DataContainer container = super.toContainer();
-		if(this.skill != null)
+		if(this.skills != null)
 		{
-			container.set(PassiveSkillsPlugin.MINING_SKILL, this.skill);
+			container.set(PassiveSkillsPlugin.SKILLS, this.skills);
 		}
 		return container;
 	}

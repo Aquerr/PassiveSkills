@@ -1,6 +1,7 @@
 package io.github.aquerr.passiveskills.data;
 
 import io.github.aquerr.passiveskills.PassiveSkillsPlugin;
+import io.github.aquerr.passiveskills.entities.FightingSkill;
 import io.github.aquerr.passiveskills.entities.MiningSkill;
 import io.github.aquerr.passiveskills.entities.Skill;
 import io.github.aquerr.passiveskills.entities.SkillType;
@@ -9,82 +10,72 @@ import org.spongepowered.api.data.DataContainer;
 import org.spongepowered.api.data.DataHolder;
 import org.spongepowered.api.data.manipulator.mutable.common.AbstractData;
 import org.spongepowered.api.data.merge.MergeFunction;
+import org.spongepowered.api.data.value.mutable.ListValue;
 import org.spongepowered.api.data.value.mutable.Value;
 
 import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 public class SkillDataImpl extends AbstractData<SkillData, ImmutableSkillData> implements SkillData
 {
-	private Skill skill;
+	private List<Skill> skills = new ArrayList<>();
 
 	public SkillDataImpl()
 	{
-		this(new MiningSkill());
+		this(Arrays.asList(new MiningSkill(), new FightingSkill()));
 	}
 
-	public SkillDataImpl(final Skill skill)
+	public SkillDataImpl(final List<Skill> skills)
 	{
-		this.skill = skill;
+		this.skills.addAll(skills);
 		this.registerGettersAndSetters();
 	}
 
 	@Override
-	public Value<Skill> skill()
+	public ListValue<Skill> skills()
 	{
-		if (this.skill.getType() == SkillType.MINING)
-			return Sponge.getRegistry().getValueFactory().createValue(PassiveSkillsPlugin.MINING_SKILL, this.skill, new MiningSkill());
-		else
-		{
-			return Sponge.getRegistry().getValueFactory().createValue(PassiveSkillsPlugin.MINING_SKILL, this.skill, new Skill("Mining", SkillType.MINING, 0, 0));
-		}
+		return Sponge.getRegistry().getValueFactory().createListValue(PassiveSkillsPlugin.SKILLS, this.skills);
 	}
 
 	@Override
 	protected void registerGettersAndSetters()
 	{
-		if (this.skill.getType() == SkillType.MINING)
-		{
-			registerKeyValue(PassiveSkillsPlugin.MINING_SKILL, this::skill);
-			registerFieldSetter(PassiveSkillsPlugin.MINING_SKILL, this::setSkill);
-			registerFieldGetter(PassiveSkillsPlugin.MINING_SKILL, this::getSkill);
-		}
-		else if (this.skill.getType() == SkillType.FIGHTING)
-		{
-			registerKeyValue(PassiveSkillsPlugin.FIGHTING_SKILL, this::skill);
-			registerFieldSetter(PassiveSkillsPlugin.FIGHTING_SKILL, this::setSkill);
-			registerFieldGetter(PassiveSkillsPlugin.FIGHTING_SKILL, this::getSkill);
-		}
+		registerKeyValue(PassiveSkillsPlugin.SKILLS, this::skills);
+		registerFieldSetter(PassiveSkillsPlugin.SKILLS, this::setSkills);
+		registerFieldGetter(PassiveSkillsPlugin.SKILLS, this::getSkills);
 	}
 
 	@Override
 	public Optional<SkillData> fill(DataHolder dataHolder, MergeFunction overlap)
 	{
 		SkillData merged = overlap.merge(this, dataHolder.get(SkillData.class).orElse(null));
-		this.skill = merged.skill().get();
+		this.skills = merged.skills().get();
 		return Optional.of(this);
 	}
 
 	@Override
 	public Optional<SkillData> from(DataContainer container)
 	{
-		if(!container.contains(PassiveSkillsPlugin.MINING_SKILL) && !container.contains(PassiveSkillsPlugin.FIGHTING_SKILL))
+		if(!container.contains(PassiveSkillsPlugin.SKILLS))
 			return Optional.empty();
 
-		this.skill = container.getSerializable(PassiveSkillsPlugin.MINING_SKILL.getQuery(), Skill.class).orElse(container.getSerializable(PassiveSkillsPlugin.FIGHTING_SKILL.getQuery(), Skill.class).get());
+		this.skills = container.getSerializableList(PassiveSkillsPlugin.SKILLS.getQuery(), Skill.class).get();
 		return Optional.of(this);
 	}
 
 	@Override
 	public SkillData copy()
 	{
-		return new SkillDataImpl(this.skill);
+		return new SkillDataImpl(this.skills);
 	}
 
 	@Override
 	public ImmutableSkillData asImmutable()
 	{
-		return new ImmutableSkillDataImpl(this.skill);
+		return new ImmutableSkillDataImpl(this.skills);
 	}
 
 	@Override
@@ -93,26 +84,23 @@ public class SkillDataImpl extends AbstractData<SkillData, ImmutableSkillData> i
 		return SkillDataBuilder.CONTENT_VERSION;
 	}
 
-	private Skill getSkill()
+	private List<Skill> getSkills()
 	{
-		return this.skill;
+		return this.skills;
 	}
 
-	private void setSkill(final @Nullable Skill skill)
+	private void setSkills(final @Nullable List<Skill> skills)
 	{
-		this.skill = skill;
+		this.skills = skills;
 	}
 
 	@Override
 	public DataContainer toContainer()
 	{
 		DataContainer container = super.toContainer();
-		if(this.skill != null)
+		if(this.skills != null)
 		{
-			if (this.skill.getType() == SkillType.MINING)
-				container.set(PassiveSkillsPlugin.MINING_SKILL, this.skill);
-			else if (this.skill.getType() == SkillType.FIGHTING)
-				container.set(PassiveSkillsPlugin.FIGHTING_SKILL, this.skill);
+			container.set(PassiveSkillsPlugin.SKILLS, this.skills);
 		}
 		return container;
 	}

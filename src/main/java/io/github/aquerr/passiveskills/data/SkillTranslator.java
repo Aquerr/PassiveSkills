@@ -48,7 +48,7 @@ public class SkillTranslator implements DataTranslator<Skill>
 	@Override
 	public DataContainer translate(Skill obj) throws InvalidDataException
 	{
-		return new MemoryDataContainer()
+		return DataContainer.createNew()
 				.set(SkillQueries.NAME_QUERY, obj.getName())
 				.set(SkillQueries.LEVEL_QUERY, obj.getLevel())
 				.set(SkillQueries.EXPERIENCE_QUERY, obj.getExperience())

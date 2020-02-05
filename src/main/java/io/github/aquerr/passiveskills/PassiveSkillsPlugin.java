@@ -3,6 +3,7 @@ package io.github.aquerr.passiveskills;
 import com.google.common.reflect.TypeToken;
 import com.google.inject.Inject;
 import io.github.aquerr.passiveskills.data.*;
+import io.github.aquerr.passiveskills.entities.FightingSkill;
 import io.github.aquerr.passiveskills.entities.MiningSkill;
 import io.github.aquerr.passiveskills.entities.Skill;
 import io.github.aquerr.passiveskills.listeners.AttackEntityListener;
@@ -13,6 +14,7 @@ import org.spongepowered.api.data.DataManager;
 import org.spongepowered.api.data.DataQuery;
 import org.spongepowered.api.data.DataRegistration;
 import org.spongepowered.api.data.key.Key;
+import org.spongepowered.api.data.value.mutable.ListValue;
 import org.spongepowered.api.data.value.mutable.Value;
 import org.spongepowered.api.event.EventManager;
 import org.spongepowered.api.event.Listener;
@@ -32,10 +34,13 @@ public class PassiveSkillsPlugin
 {
 	private static PassiveSkillsPlugin INSTANCE = null;
 
+	//PassiveSkills Data
+	public static Key<ListValue<Skill>> SKILLS = DummyObjectProvider.createExtendedFor(Key.class, "PASSIVE_SKILLS");
+
 	//PassiveSkills Data Keys
-	public static Key<Value<Skill>> MINING_SKILL = DummyObjectProvider.createExtendedFor(Key.class, "MINING_SKILL");
+	public static Key<Value<MiningSkill>> MINING_SKILL = DummyObjectProvider.createExtendedFor(Key.class, "MINING_SKILL");
 	public static Key<Value<Skill>> LUMBER_SKILL = DummyObjectProvider.createExtendedFor(Key.class, "LUMBER_SKILL");
-	public static Key<Value<Skill>> FIGHTING_SKILL = DummyObjectProvider.createExtendedFor(Key.class, "FIGHTING_SKILL");
+	public static Key<Value<FightingSkill>> FIGHTING_SKILL = DummyObjectProvider.createExtendedFor(Key.class, "FIGHTING_SKILL");
 	public static Key<Value<Skill>> FISHING_SKILL = DummyObjectProvider.createExtendedFor(Key.class, "FISHING_SKILL");
 
 
@@ -98,18 +103,25 @@ public class PassiveSkillsPlugin
 
 	private void registerKeys()
 	{
+		SKILLS = Key.builder()
+				.type(new TypeToken<ListValue<Skill>>(){})
+				.id("passive_skills")
+				.name("Passive Skills")
+				.query(DataQuery.of("PassiveSkills"))
+				.build();
+
 		MINING_SKILL = Key.builder()
-				.type(new TypeToken<Value<Skill>>(){})
+				.type(new TypeToken<Value<MiningSkill>>(){})
 				.id("mining_skill")
 				.name("Mining Skill")
-				.query(DataQuery.of("MiningSkill"))
+				.query(DataQuery.of("PassiveSkills", "MiningSkill"))
 				.build();
 
 		FIGHTING_SKILL = Key.builder()
-				.type(new TypeToken<Value<Skill>>(){})
+				.type(new TypeToken<Value<FightingSkill>>(){})
 				.id("fighting_skill")
 				.name("Fighting Skill")
-				.query(DataQuery.of("FightingSkill"))
+				.query(DataQuery.of("PassiveSkills", "FightingSkill"))
 				.build();
 
 		//Register other keys here...
